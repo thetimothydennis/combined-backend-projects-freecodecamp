@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html>
+   <head>
+      <title>FreeCodeCamp Backend Certification Projects/title</title>
+      <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+      <link href="style.css" rel="stylesheet" type="text/css">
+   </head>
+
+   <body>
+    <h1>freeCodeCamp Backend Certification Projects</h1>
+    <div class="container">
+      <h2>1 - Timestamp Microservice</2>
+      <h3>Example Usage:</h3>
+      <ul>
+        <li><a href="api/2015-12-25">[project url]/api/2015-12-25</a></li>
+        <li><a href="api/1451001600000">[project url]/api/1451001600000</a></li>
+      </ul>
+
+      <h3>Example Output:</h3>
+      <p>
+        <code>{"unix":1451001600000, "utc":"Fri, 25 Dec 2015 00:00:00 GMT"}</code>
+      </p>
+    </div>
+
+    <div class="container">
+      <h2>2 - Request Header Parser Microservice</h2>
+
+      <h3>Example Usage:</h3>
+      <p>
+        <a href="api/whoami">[base url]/api/whoami</a>
+      </p>
+
+      <h3>Example Output:</h3>
+      <p>
+        <code>{"ipaddress":"::ffff:159.20.14.100","language":"en-US,en;q=0.5",<br>"software":"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0"}</code>
+      </p>
+    </div>
+    <div class="container">
+    <h2>3 - URL Shortener Microservice</h2>
+        <form action="api/shorturl" method="POST">
+
+
+            <label for="url_input">URL:</label>
+            <input id="url_input" type="text" name="url" placeholder="https://www.freecodecamp.org/" />
+            <input type="submit" value="POST URL" />
+
+        </form>
+    </div>
+    <div>
+      <div class="container">
+        <h2>4 - Exercise tracker</h2>
+        <form action="/api/users" method="post">
+          <h3>Create a New User</h3>
+          <p><code>POST /api/users</code></p>
+          <input id="uname" type="text" name="username" placeholder="username" />
+          <input type="submit" value="Submit" />
+        </form>
+        <form id="exercise-form" method="post">
+          <h3>Add exercises</h3>
+          <p><code>POST /api/users/:_id/exercises</code></p>
+          <input id="uid" type="text" name=":_id" placeholder=":_id" />
+          <input id="desc" type="text" name="description" placeholder="description*" />
+          <input id="dur" type="text" name="duration" placeholder="duration* (mins.)" />
+          <input id="date" type="text" name="date" placeholder="date (yyyy-mm-dd)" />
+          <input type="submit" value="Submit" />
+        </form>
+        <p>
+          <strong>GET user's exercise log: </strong>
+          <code>GET /api/users/:_id/logs?[from][&amp;to][&amp;limit]</code>
+        </p>
+        <p><strong>[ ]</strong> = optional</p>
+        <p><strong>from, to</strong> = dates (yyyy-mm-dd); <strong>limit</strong> = number</p>
+      </div>
+      <script>
+        const exerciseForm = document.getElementById("exercise-form");
+  
+        exerciseForm.addEventListener("submit", () => {
+          const userId = document.getElementById("uid").value;
+          exerciseForm.action = `/api/users/${userId}/exercises`;
+  
+          exerciseForm.submit();
+        });
+      </script>
+    </div>
+
+    <div class="container">
+      <h2>5 - API Project: File Metadata Microservice</h2>
+
+      <h3>Usage:</h3>
+      <p>
+        Please Upload a File ...
+      </p>
+      <div class="view">
+        <h4 id="output"></h4>
+        <form enctype="multipart/form-data" method="POST" action="/api/fileanalyse">
+          <input id="inputfield" type="file" name="upfile">
+          <input id="button" type="submit" value="Upload">
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
