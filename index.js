@@ -40,9 +40,16 @@ app.get("/api/", (req, res, next) => {
     }
   );
 // return date for given string
+
+
+app.get("/api/users", (req, res) => {
+  exercise.findAllUsers().then(results => res.send( results ))
+  .catch(error => console.log(error.message));
+});
+
 app.get("/api/:date?", (req, res, next) => {
     // endpoint for 2-header-parser since they share an api endpoint
-    if (req.params.date = "whoami") {
+    if (req.params.date == "whoami") {
     let parsed = headParse.whoAmI(req)
     res.json(parsed)
     }
@@ -122,10 +129,6 @@ app.get("/api/shorturl/:shorturl", (req, res) => {
     .catch(error => console.log(error.message));
   });
 
-  app.get("/api/users", (req, res) => {
-    exercise.findAllUsers().then(results => res.send( results ))
-    .catch(error => console.log(error.message));
-  });
 
   app.post("/api/users/:_id/exercises", (req, res) => {
     exercise.inputExercise(req).then(results => res.json({ _id: results._id, username: results.username, date: results.date, duration: results.duration, description: results.description }))

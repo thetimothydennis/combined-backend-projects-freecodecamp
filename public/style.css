@@ -1,36 +1,100 @@
 /****** Main Styling ******/
 
 body {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-items: center;
+	align-content: center;
+	justify-content: center;
 	font-family: 'Roboto', sans-serif;
-	font-size: 16px;
-	color: #222;
-	background-color: #FaFaFa;
+	font-size: 1.5em;
+	color: #eee;
+	background-color: #111;
 	text-align: center;
-	line-height: 1.4em;
+	line-height: 1.75em;
+	margin: 0 2%
+}
+
+
+p {
+	padding: 0 10%;
+	margin: 3% 10%;
 }
 
 .container {
-	padding: 0;
-	margin-top: 40px;
+	display: flex;
+	flex-direction: column;
+	margin: 5% 10%;
+	padding: 5% 10%;
+	color: #111111;
+	border-radius: 5%;
+	width: 75%
+}
+
+.ex0 {
+	background-color: #ff5555;
+	color:#eee;
+}
+
+.ex1 {
+	background-color: #ffaa55;
+}
+
+.ex2 {
+	background-color: #cccc33
+}
+
+.ex3 {
+	background-color: #33dd33
+}
+
+.ex4 {
+	background-color: #22aadd;
+}
+
+.ex5 {
+	background-color: #5555ff;
+}
+
+
+h2 {
+	padding: .5%
 }
 
 h3 {
-  margin-top: 30px;
-}
-
-hr {
-	margin: 25px;
+  margin-top: .5%;
 }
 
 .footer {
 	margin-top: 40px;
 }
 
+h1 {
+	line-height: 1.2em;
+	font-size: 2rem;
+	margin: 0;
+	padding: 0
+}
+
 code {
+  justify-content:center;
   font-family: monospace;
-  padding: 2px;
-  color: black;
-  background-color: #fff;
+  display: flex;
+  margin: 0 -25%;
+  font-size: .9em; 
+  color: #88ff88;
+  background-color: #0f0f0f;
+
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	margin: auto;
+	align-items: center;
+	align-content: center;
+	justify-content: space-evenly;
 }
 
 ul {
@@ -42,5 +106,58 @@ li {
 }
 
 a {
-	color: #2574A9;
+	text-decoration: none;
+	color: #333333;
+}
+
+input {
+	background-color: #1d1d1d;
+	color: #afafaf;
+	font-size: 1.2em
+}
+
+.filefield {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items:center;
+}
+
+.view {
+	display: flex;
+	position: relative;
+}
+
+.finalfield {
+	display: flex;
+	flex-direction: column;
+}
+
+.column-form1 {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	right: 40%
+}
+
+.column-form2 {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	right: -5%;
+}
+
+
+.column-width{
+
+	display: flex;
+	flex-direction: row;
+	align-items: baseline;
+	justify-content: space-between;
+	width: 30%
+}
+
+.full {
+	display: inline-block;
+	margin: auto
 }
