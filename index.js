@@ -42,46 +42,28 @@ app.get("/api/", (req, res, next) => {
 // return date for given string
 
 
-
-
-app.get("/api/:date", (req, res, next) => {
-    // endpoint for 2-header-parser since they share an api endpoint
-    if (req.params.date == "whoami") {
-      res.redirect("/whoami")
-    }
-    else if (req.params.date == "users") {
-      res.redirect("/api/users/allusers")
-    }
-
-    else {
-    // string passes until proven false
-    req.fails = false;
-    // get the date keys using appropriate function
-    req.utc = time.getUTCString(req.params.date);
-    req.unix = time.getUnixString(req.params.date);
-    if ((req.utc || req.unix) == "Invalid Date") {
-      req.fails = true;
-      next();
-    };
-    next();
-    }
-  },
-    (req, res) => {
-      if (!req.fails) {
-        res.json({ "unix": req.unix, "utc": req.utc });
-      }
-      else {
-        res.json({"error": "Invalid Date"});
-      }
-    }
-  );
-
-
 // endpoint for 2-header-parser since they share an api endpoint
- app.get("/whoami", (req, res) => {
-  let parsed = headParse.whoAmI(req)
-  res.json(parsed)
- }) 
+ app.get("/api/:whoami", (req, res) => {
+  if (req.params.whoami == "whoami") {
+    let parsed = headParse.whoAmI(req)
+    res.json(parsed)
+  }
+  else if (req.params.whoami == "users") {
+    res.redirect("/api/users/allusers")
+  }
+  else {
+    // endpoint for 1-timestamp date input
+    let responseObj = {}
+    // get the date keys using appropriate function
+    req.utc = time.getUTCString(req.params.whoami);
+    req.unix = time.getUnixString(req.params.whoami);
+    if ((req.utc || req.unix) == "Invalid Date") {
+      responseObj = {"error": "Invalid Date"}
+    }
+    else {responseObj = {"unix": req.unix, "utc": req.utc }}
+    res.json(responseObj)
+  }})
+ 
 
 // enpoints for 3 - url-shortener
 app.post("/api/shorturl", (req, res) => {
