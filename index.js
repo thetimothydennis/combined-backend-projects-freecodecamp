@@ -42,16 +42,15 @@ app.get("/api/", (req, res, next) => {
 // return date for given string
 
 
-app.get("/api/users", (req, res) => {
-  exercise.findAllUsers().then(results => res.send( results ))
-  .catch(error => console.log(error.message));
-});
 
-app.get("/api/:date?", (req, res, next) => {
+
+app.get("/api/:date", (req, res, next) => {
     // endpoint for 2-header-parser since they share an api endpoint
     if (req.params.date == "whoami") {
-    let parsed = headParse.whoAmI(req)
-    res.json(parsed)
+      res.redirect("/whoami")
+    }
+    else if (req.params.date == "users") {
+      res.redirect("/api/users/allusers")
     }
 
     else {
@@ -76,6 +75,13 @@ app.get("/api/:date?", (req, res, next) => {
       }
     }
   );
+
+
+// endpoint for 2-header-parser since they share an api endpoint
+ app.get("/whoami", (req, res) => {
+  let parsed = headParse.whoAmI(req)
+  res.json(parsed)
+ }) 
 
 // enpoints for 3 - url-shortener
 app.post("/api/shorturl", (req, res) => {
@@ -137,6 +143,11 @@ app.get("/api/shorturl/:shorturl", (req, res) => {
 
   app.get("/api/users/:_id/logs", (req, res) => {
     exercise.getLogs(req).then(results => res.json({ _id: results._id, username: results.username, count: results.count, log: results.log }))
+    .catch(error => console.log(error.message));
+  });
+
+  app.get("/api/users/allusers", (req, res) => {
+    exercise.findAllUsers().then(results => res.send( results ))
     .catch(error => console.log(error.message));
   });
 
