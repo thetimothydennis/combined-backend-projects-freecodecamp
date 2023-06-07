@@ -1,70 +1,41 @@
-
-const bodyParser = require("body-parser")
-
-const mongoose = require("mongoose")
+import bodyParser from "body-parser";
+import mongoose from "mongoose";
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true});
 
 const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true
-  }
+  username: { type: String, required: true, unique: true }
 });
 
 const exerciseSchema = new mongoose.Schema({
-  _uid: {
-    type: String,
-    required: true
-  },
-  description: {
-    type: String,
-    required: true
-  },
-  duration: {
-    type: Number,
-    required: true
-  },
-  date: {
-    type: Date,
-    required: true,
-    set: date => {
-      return new Date(date)
-    },
-    get: date => {
-      return date.toDateString()
-    }
+  _uid: { type: String, required: true }, description: { type: String, required: true }, duration: { type: Number, required: true }, date: { type: Date, required: true, set: date => {return new Date(date) }, get: date => {return date.toDateString() }
   }
 });
 
 const User = mongoose.model("User", userSchema);
-
 const Exercise = mongoose.model("Exercise", exerciseSchema);
 
 const findUserByID = async function(input) {
   try {
-    let findAUser = await User.find({ "_id": input }, { "__v": 0 })
-    return findAUser
+    let findAUser = await User.find({ "_id": input }, { "__v": 0 });
+    return findAUser;
   }
-  catch(error) {
-    console.log(error.message)
-  }
+  catch(error) { console.log(error.message); }
 };
 
-module.exports.findUser = async function (req) {
-  const findUser = await User.find({ username: req.body.username })
+export async function findUser (req) {
+  const findUser = await User.find({ username: req.body.username });
 
   if (findUser.length == 0){
     let user = new User({ username: req.body.username });
-    await user.save()
+    await user.save();
     let findUserAgain = await User.find({ username: req.body.username });
     return findUserAgain;
   }
   else return findUser;
 };
 
-module.exports.inputExercise = async function (req) {
+export async function inputExercise (req) {
   try {
     let user = await findUserByID(req.params._id);
     let exerciseDate;
@@ -75,7 +46,6 @@ module.exports.inputExercise = async function (req) {
     else {
       exerciseDate = new Date(req.body.date);
     };
-
     const newExercise = new Exercise({ _uid: user[0]._id, description: req.body.description, duration: req.body.duration, date: exerciseDate });
     await newExercise.save();
     user[0].date = newExercise.date;
@@ -88,7 +58,7 @@ module.exports.inputExercise = async function (req) {
   };
 };
 
-module.exports.getLogs = async function (req) {
+export async function getLogs (req) {
   let responseObject = {};
   try {
     let user = await findUserByID(req.params._id)
@@ -96,34 +66,17 @@ module.exports.getLogs = async function (req) {
     responseObject.username = user[0].username;
     let matchObj = {};
     if (!req.query.from && !req.query.to) {
-      matchObj = { $match: {
-        _uid: user[0].id
-      } }
+      matchObj = { $match: { _uid: user[0].id } }
     }
     else if ((req.query.from.length > 0) && (!req.query.to)) {
-      matchObj = { $match: {
-        _uid: user[0].id,
-        date: { $gte: new Date(req.query.from) }
-      } };
+      matchObj = { $match: { _uid: user[0].id, date: { $gte: new Date(req.query.from) } } };
     }
     else if (req.query.to.length > 0) {
-      matchObj = { $match: {
-        _uid: user[0].id,
-        date: { $gte: new Date(req.query.from), $lte: new Date(req.query.to)}
-      } };
+      matchObj = { $match: { _uid: user[0].id, date: { $gte: new Date(req.query.from), $lte: new Date(req.query.to)} } };
     }
 
     let aggregateLogs = await Exercise.aggregate( 
-      [ matchObj,
-      {
-        $project: {
-          _id: 0,
-          description: "$description",
-          date: "$date",
-          duration: "$duration"
-        }
-      }
-      ] 
+      [ matchObj, { $project: { _id: 0, description: "$description", date: "$date", duration: "$duration" } } ] 
     );
 
     for (let i of aggregateLogs) {
@@ -140,7 +93,7 @@ module.exports.getLogs = async function (req) {
   };
 };
 
-module.exports.findAllUsers = async function () {
+export async function findAllUsers () {
   try {
     let allUsers = await User.find({}, { "__v": 0 });
     return allUsers;
