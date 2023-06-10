@@ -4,12 +4,16 @@ function getDate(input) {
 };
 // convertString function
 function convertString(input) {
-  if (/\D/.test(input)) {return getDate(input);}
-  else if (!/\D/.test(input)) {return getDate(Number(input));}
+  if (/\D/.test(input)) {
+    return getDate(input);
+  }
+  else if (!/\D/.test(input)) {
+    return getDate(Number(input));
+  };
 };
 // getUTCString
 export function getUTCString(input) {
-    return convertString(input).toUTCString();
+  return convertString(input).toUTCString();
 };
 // getUnixString
 export function getUnixString(input) {

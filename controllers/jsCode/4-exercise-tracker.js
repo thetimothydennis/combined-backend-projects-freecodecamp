@@ -1,14 +1,40 @@
-import bodyParser from "body-parser";
 import mongoose from "mongoose";
 
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(process.env.MONGO_URI, { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true
+});
 
 const userSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true }
+  username: { 
+    type: String, 
+    required: true, 
+    unique: true 
+  }
 });
 
 const exerciseSchema = new mongoose.Schema({
-  _uid: { type: String, required: true }, description: { type: String, required: true }, duration: { type: Number, required: true }, date: { type: Date, required: true, set: date => {return new Date(date) }, get: date => {return date.toDateString() }
+  _uid: { 
+    type: String, 
+    required: true 
+  },
+  description: { 
+    type: String, 
+    required: true 
+  }, 
+  duration: { 
+    type: Number, 
+    required: true 
+  }, 
+  date: { 
+    type: Date, 
+    required: true, 
+    set: date => {
+      return new Date(date);
+    }, 
+    get: date => {
+      return date.toDateString();
+    }
   }
 });
 
@@ -69,18 +95,42 @@ export async function getLogs (req) {
       matchObj = { $match: { _uid: user[0].id } }
     }
     else if ((req.query.from.length > 0) && (!req.query.to)) {
-      matchObj = { $match: { _uid: user[0].id, date: { $gte: new Date(req.query.from) } } };
+      matchObj = { 
+        $match: { 
+          _uid: user[0].id, 
+          date: { 
+            $gte: new Date(req.query.from) 
+          } 
+        } 
+      };
     }
     else if (req.query.to.length > 0) {
-      matchObj = { $match: { _uid: user[0].id, date: { $gte: new Date(req.query.from), $lte: new Date(req.query.to)} } };
+      matchObj = { 
+        $match: { 
+          _uid: user[0].id, 
+          date: {
+            $gte: new Date(req.query.from), 
+            $lte: new Date(req.query.to)
+          } 
+        } 
+      };
     }
 
     let aggregateLogs = await Exercise.aggregate( 
-      [ matchObj, { $project: { _id: 0, description: "$description", date: "$date", duration: "$duration" } } ] 
+      [ matchObj, 
+        { 
+          $project: { 
+            _id: 0, 
+            description: "$description", 
+            date: "$date", 
+            duration: "$duration" 
+          } 
+        } 
+      ] 
     );
 
     for (let i of aggregateLogs) {
-      i.date = i.date.toDateString()
+      i.date = i.date.toDateString();
     };
 
     responseObject.count = aggregateLogs.length;
